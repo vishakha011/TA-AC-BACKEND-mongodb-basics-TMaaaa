@@ -17,7 +17,7 @@ collectionList.forEach((elm) => {db.createCollection(elm)})
 ```
 - add multiple players in those collections which should have fields like `name`, `age` and `email` and `bid_price`.
 ```
-db.cricket.insert([
+db.cricket.insertMany([
   {  "name" : "A", 
   "age" : 30, 
   "email" : "hello@gmail.com", 
@@ -28,7 +28,7 @@ db.cricket.insert([
   "bid_price" : 4000 
   }])
 
-db.football.insert([
+db.football.insertMany([
   {'name': 'C', 
   'age': 28, 
   'email': 'football@gmail.com', 
@@ -36,9 +36,10 @@ db.football.insert([
   {'name': 'D', 
   'age': 22, 
   'email': 'football_1@gmail.com', 
-  'bid_price': 5000}])
+  'bid_price': 5000
+  }])
 
-  db.TT.insert([
+  db.TT.insertMany([
     {'name': 'X', 
     'age': 18, 
     'email': 'TT@gmail.com', 
@@ -46,7 +47,8 @@ db.football.insert([
     {'name': 'Y', 
     'age': 29, 
     'email': 'TT_1@gmail.com', 
-    'bid_price': 8000}])  
+    'bid_price': 8000
+    }])  
 ```
 - list all collections in sports database.
 ```
@@ -58,7 +60,29 @@ db.TT.renameCollection('tennis')
 ```
 - create a capped collection called `khokho` which should have max 3 documents.
   Try inserting more than 3 and see what happens?
+
 ```
+db.createCollection('khokho', {capped : true, size : 2048, max : 3});
+db.khokho.insertMany([
+    {'name': 'W', 
+    'age': 18, 
+    'email': 'TT@gmail.com', 
+    'bid_price': 6000}, 
+    {'name': 'X', 
+    'age': 29, 
+    'email': 'TT_1@gmail.com', 
+    'bid_price': 8000
+    },
+    {'name': 'Y', 
+    'age': 18, 
+    'email': 'TT@gmail.com', 
+    'bid_price': 6000}, 
+    {'name': 'Z', 
+    'age': 29, 
+    'email': 'TT_1@gmail.com', 
+    'bid_price': 8000
+    }])  
+
 When more than 3 documents are inserted, then present d0cuments are removed and the new ones are added. The size remains 3
 ```
 - check whether a collection is capped or not?
@@ -67,7 +91,7 @@ db.khokho.isCapped()
 ```
 - drop all documents from `football` collection.
 ```
-bd.football.remove({})
+db.football.remove({})
 ```
 - delete cricket collection completely.
 ```
