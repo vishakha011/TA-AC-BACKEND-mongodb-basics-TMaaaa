@@ -3,7 +3,13 @@ writeCode
 Write code to execute below expressions.
 
 1. Create a database named `blog`.
+```
+use blog
+```
 2. Create a collection called 'articles'.
+```
+db.createCollection('articles')
+```
 3. Insert multiple documents(at least 3) into articles. It should have fields
 
 - title as string
@@ -19,37 +25,109 @@ Write code to execute below expressions.
 
 ```js
 // An article should look like in the database
-{
-  _id: 'some_random_id',
-  title: '',
-  details: '',
-  author: {
-    name: '',
-    email: '',
-    age: ''
-  },
-  tags: ['js', 'mongo']
-}
+var articles = [
+  { 
+    title: 'Node Js',
+    details: '5th July',
+    author: {
+      name: 'author 1',
+      email: 'author1@gmail.com',
+      age: 38
+    },
+    tags: ['js', 'mongo', 'backend']
+}, 
+{ 
+    title: 'MongoDB',
+    details: '10th Jan',
+    author: {
+      name: 'author 2',
+      email: 'author2@gmail.com',
+      age: 27
+    },
+    tags: ['js', 'mongo', 'database']
+}, 
+{ 
+    title: 'HTML-CSS',
+    details: '27th Sept',
+    author: {
+      name: 'author 3',
+      email: 'author3@gmail.com',
+      age: 40
+    },
+    tags: ['html', 'css', 'frontend']
+}]
+
+db.articles.insertMany(articles)
 ```
 
 4. Find all the articles using `db.COLLECTION_NAME.find()`
+```
+db.articles.find().pretty()
+```
+
 5. Find a document using \_id field.
+```
+db.articles.find({"_id" : ObjectId("5fc1e36bac74a3184c54b16a")}).pretty()
+```
+
 6. 1. Find documents using title
+```
+db.articles.find({title: 'Node Js'}).pretty()
+```
+
 7. 2. Find documents using author's name field.
+```
+db.articles.find({"author.name": 'author 2'}).pretty()
+```
 8. Find document using a specific tag.
+```
+db.articles.find({tags :'frontend'}).pretty()
+```
 
 9. Update title of a document using its \_id field.
+```
+db.articles.update({"_id" : ObjectId("5fc1e986ac74a3184c54b16b")}, {$set: {title:"HTML-CSS" 
+}})
+```
 10. Update a author's name using article's title.
+```
+db.articles.update({title: 'Node Js'}, {$set : {'author.name': 'Author 1'}})
+```
+
 11. rename details field to description from all articles in articles collection.
+```
+db.articles.updateMany({}, {$rename : {'details': 'description'}})
+```
+
 12. Add additional tag in a specific document.
+```
+db.articles.update({title: "MongoDB"}, {$push : {tags: 'read'}})
+```
 
 13. Update an article's title using $set and without $set.
-
+- with `$set`
+```
+db.articles.update({title: 'Node Js'}, {$set : {"Node Js" : "Node JS"}})
+```
+- without `$set`
+```
+db.articles.update({title: 'Node Js'}, {"Node Js" : "Node JS"})
+```
 - Write the differences here ?
+```
+With `$set` the specific part of the query is updated.
+Without `$set` the present query is replaces with the new set of data.
+```
 
 13. find an article using title and increment it's auhtor's age by 5.
+```
+ db.articles.update({title: "HTML-CSS"}, {$inc: {"author.age": 5}})
+```
 
 14. Delete a document using \_id field with `db.COLLECTION_NAME.remove()`.
+```
+db.articles.remove({"_id" : ObjectId("5fc1e36bac74a3184c54b168")})
+```
 
 // Sample data
 
@@ -168,6 +246,20 @@ db.users.insertMany([
 Insert above data into database to perform below queries:-
 
 - Find all males who play cricket.
+```
+ db.users.find({gender: "Male"}, {sports: "cricket"})
+```
+
 - Update user with extra golf field in sports array whose name is "Steve Ortega".
+```
+db.users.update({name: "Steve Ortega"}, {$push : {sports: "golf"}})
+```
 - Find all users who play either 'football' or 'cricket'.
+```
+db.users.find({sports : {$in : ['football', 'cricket']}}).pretty()
+```
+
 - Find all users whose name includes 'ri' in their name.
+```
+ db.users.find({name: {$regex : "ri"}}).pretty()
+```
